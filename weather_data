@@ -1,0 +1,232 @@
+import numpy as np
+import matplotlib.pyplot as pplt
+#fig, ax1 = pplt.subplots() #sharey= False
+
+
+
+maximum = 0 
+max_list = []
+minimum = 0
+count = 0
+
+count2 = 0
+plot1 = 0
+plot2 = 0
+plot3 = 0
+plot4 = 0
+plot5 = 0
+days = 0
+
+day_list = []
+wind_speed = []
+temp = []
+#humidity = []
+global humidity
+humidity = []
+#precip = []
+global precip 
+precip = []
+bins = np.linspace(0, 20, 40)
+months = [1,2,3,4,5,6,7,8,9,10,11,12]
+past_month = months[count]
+month_data = []
+temp_month = 0
+
+temp_list = []
+
+ten_list = []
+dict_month_data = {}
+with open("WeatherDataCLL.csv", "r") as file:
+    list_file = []
+    for i in file:
+        list_file.append( list(  ( (i.strip("\n")).split(",")  ) ) )
+        
+    
+    
+    
+
+    
+    count_rain = 0
+    percent_total = 0
+    date = []
+    for i in range(1, len(list_file)): # whole file
+        for j in range(len(list_file[i])): #each sub item
+            days +=1
+            date = list_file[i][0].split("/")
+            
+           
+           
+            
+            for p in range(1, 12):
+
+                current_month = date[0]
+                
+                
+                
+                if (current_month == past_month):
+                    
+                    if (list_file[i][-3] != ""):
+                        
+                        temp_month += float(list_file[i][-3])
+                        
+                else:
+                    # it adds up all the data from each month, doesn't collect the data for the 10 ten years
+                    month_data.append(temp_month)
+                    
+                    if (past_month == 12):
+                        ten_list.append(month_data)
+                    
+                    temp_month = 0
+                    
+                    past_month = date[0]
+             
+                        
+           
+            """
+            if (date[0] == months[count] and list_file[i][-3] != ""):
+                
+                temp_month += float(list_file[i][-3])
+            else:
+                count+=1 
+                if (count == len(months)):
+                    count = 11
+                #dict_month_data[count] = temp_month
+                month_data.append(temp_month)
+
+                temp_month = 0
+                
+                if list_file[i][-3] != "":
+                    temp_month += float(list_file[i][-3])
+            
+             """  
+            if (list_file[i][-3] == '' and list_file[i][-3] == "" and list_file[i][3] == "" and list_file[i][1] == "" and list_file[i][2] == ""):
+                continue
+            else:
+                if (list_file[i][-2] != "" and list_file[i][1] != ""):
+                    #temp+= int(list_file[i][-3])
+                    #temp_count +=1
+                    count = 0
+                    wind_speed.append(float(list_file[i][1]))
+                    temp.append(float(list_file[i][-2]))
+                    days+=1
+                    day_list.append(days)
+                    
+                if (list_file[i][2] !="" and list_file[i][3] !=""):
+                    # 2 is precipitation 3 is humidity
+                    
+                    precip.append(float(list_file[i][2]))
+                    
+                    humidity.append(float(list_file[i][3]))
+    #print(len(precip))
+    #print(len(humidity))      
+    pplt.xlabel("Average Humidity %")
+    pplt.ylabel("Precipitation")
+    
+    pplt.scatter(humidity,precip)
+
+    pplt.show()
+    ####################
+    ##### BREAK ##########
+    ####################
+   
+    print(month_data)
+    ten_sum = 0
+    #print(dict_month_data)
+    for a in range(len(ten_list)):
+        for b in range(len(ten_list[a])):
+            ten_sum+= ten_list [a][0]
+            
+            
+    ###########################
+    ###########################
+    
+    
+    
+    
+    
+    #fig.tight_layout()
+    #pplt.show()
+    def plot_bar_chart(month_data, months):
+        month_dict = {}
+        fig3, ax3 = pplt.subplots()
+        ax3.set_xlabel("Month")
+        ax3.set_ylabel("Temperature")
+        ax3.set_xlim([1,12])
+        ax3.set_xticks([1,2,3,4,5,6,7,8,9,10,11,12])
+        ax3.set_yticks([0,10,20,30,40,50,60,70,80,90,100])
+
+        ax3.bar(month_data, 4,align = "center")
+       
+        #print(month_data)
+
+        #for i in range(len(month_data)):
+            #print(month_data[i])
+            #month_dict[i] = month_data[i]
+            
+        
+        pplt.show()
+    def plot_histogram(day_list, wind_speed):
+        fig2, ax2 = pplt.subplots()
+        bins = np.linspace(0, 20, 40)
+        ax2.set_ylabel("Number of days")
+        ax2.set_xlabel("Average wind speed")
+        ax2.hist(wind_speed, bins, color= "tab:green")
+        pplt.show()
+        
+        
+    def humidity(precip, humidity):
+        #ax3 = pplt.subplots()
+        
+       
+        pplt.xlabel("Average Humidity %")
+        pplt.ylabel("Precipitation")
+        
+        pplt.scatter(humidity,precip)
+
+        pplt.show()
+        
+        
+    def plot_wind_temp(day_list, wind_speed, temp):
+        fig, ax1 = pplt.subplots() #sharey= False
+        for i in range(len(day_list)):
+            color = "tab:green"
+            
+            
+            #ax1 = pplt.subplot(xlabel = "date")
+            #pplt.xlabel("date", color = color)
+            ax1.set_xlabel("Date")
+            ax1.set_ylabel("Maximum Temperatrue", color = color)
+            #pplt.ylabel("Maximum Temperature", color = color)
+            ax1.plot(day_list, temp, color = color)
+            #pplt.plot(days, int(list_file[i][-2]), "y*", color = color)
+            ax1.tick_params(axis = "y", labelcolor = color)
+            
+            
+            
+            #ax2 = pplt.subplot(xlabel = "date")
+            ax2 = ax1.twinx()
+            color = "tab:blue"
+            ax2.set_ylabel("Average Wind Speed", color = color)
+            ax2.plot(day_list, wind_speed, color = color)
+            ax2.tick_params(axis = "y", labelcolor = color)
+            #############################################
+            ##############################################
+            ###########################################
+            
+            
+            
+            
+            fig.tight_layout()
+            pplt.show()
+            fig.show()
+            if (i>1):
+                break
+ 
+            
+    
+    plot_wind_temp(day_list, wind_speed, temp)
+    plot_histogram(day_list, wind_speed)
+    #humidity(precip, humidity)
+    plot_bar_chart(month_data, months)
+
+ 
