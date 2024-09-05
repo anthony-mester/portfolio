@@ -1,0 +1,59 @@
+def triangle(file,char):
+    
+    # space, letter, space ...
+    trig_list = []
+    trig_list2 = []
+    trig_list3 = []
+
+    with open(f"{file}") as trig:
+        index = 0
+        triggy_str = ""
+        rando = []
+        triggy = []
+        letter = False
+        
+        for i in trig:
+            triggy.append(list(  ( i.strip("\n") ).split(",") ))
+            #triggy.append(list(  ( i.strip("\n") ).split(",")+[" "]  ))
+            #print(i)
+        #print(triggy)
+        
+        for i in range(len(triggy)):
+            #index = 0
+            letter = False
+            for j in range(len(triggy[i])):
+                
+                if (letter):
+                    #print(index)
+                    triggy_str += int(triggy[i][j]) * char
+                    letter = False
+                elif (letter == False):
+                    #print(index)
+                    triggy_str += int(triggy[i][j])* " "
+                    letter = True
+                #index+=1
+            triggy_str += "\n" #at the end of the sublist add a \n for a new line
+        #print(triggy_str)
+        return triggy_str
+            
+       
+
+
+
+file_input = input("Enter the filename: ")
+char_input = input("Enter a character: ")
+new_file = ""
+#print(triangle(file_input,char_input))
+alter_file = list(file_input)
+for i in range(len(alter_file)):
+    if (alter_file[i] == "."):
+        alter_file[i:] = ".txt"
+for i in range(len(alter_file)):
+    new_file+= str(alter_file[i])
+    
+with open(f"{new_file}", "w") as file:
+    file.write(triangle(file_input,char_input))
+    
+print(f"{new_file} created!")
+
+
